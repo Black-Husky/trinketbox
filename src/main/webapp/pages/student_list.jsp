@@ -29,7 +29,7 @@
 					<tbody>
 						<c:forEach items="${studentList}" var="student">
 							<tr>
-								<td><a type="button" class="btn btn-info" href=""> <span
+								<td><a type="button" class="btn btn-info" href="student_form.html?id=${student.id}"> <span
 										class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 								</a> <a type="button" class="btn btn-danger"
 									href="delete_student.html?id=${student.id}"> <span

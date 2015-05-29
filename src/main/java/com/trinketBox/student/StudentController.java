@@ -5,10 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class StudentController {
@@ -17,19 +16,44 @@ public class StudentController {
 	private RedirectAttributes redirectAttributes;
 
 	@RequestMapping(value = "/student_form")
-	public ModelAndView studentForm(HttpServletRequest request) {
-		return new ModelAndView("student_form");
+	public ModelAndView form(@RequestParam(required = false) final Long id) {
+		if(id != null){
+			Student student;
+			if((student = studentDao.getById(id)) != null)
+				return new ModelAndView("student_form", "student", student);
+		}
+		return new ModelAndView("student_form", "student", new Student());
 	}
 
 	@RequestMapping(value = "/delete_student")
-	public String studentDelete(@RequestParam("id") int id) {
+	public String delete(@RequestParam("id") int id) {
 		studentDao.delete(id);
 		return "redirect:/student_list.html";
 	}
 
+	@RequestMapping(value = "/update_student")
+	public String update(HttpServletRequest request, @RequestParam("id") Long id) {
+		Student student;
+		if((student = this.createStudent(request)) != null )
+			studentDao.update(id, student);
+		return "redirect:/student_list.html";
+	}
+
 	@RequestMapping(value = "/new_student")
-	public String studentAdd(HttpServletRequest request) {
+	public String add(HttpServletRequest request) {
 		// Handle a new student (if any):
+		Student student;
+		if((student = this.createStudent(request)) != null )
+			studentDao.persist(student);
+		return "redirect:/student_list.html";
+	}
+
+	@RequestMapping(value = "/student_list")
+	public ModelAndView list(HttpServletRequest request) {
+		return new ModelAndView("student_list", "studentDao", studentDao);
+	}
+	
+	private Student createStudent(HttpServletRequest request){
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		String educationalInstitution = request
@@ -39,14 +63,8 @@ public class StudentController {
 
 		if (name != null && email != null && educationalInstitution != null
 				&& password != null && age != null)
-			studentDao.persist(new Student(name, email, educationalInstitution,
-					Integer.valueOf(age), password));
-
-		return "redirect:/student_list.html";
-	}
-
-	@RequestMapping(value = "/student_list")
-	public ModelAndView studentList(HttpServletRequest request) {
-		return new ModelAndView("student_list", "studentDao", studentDao);
+			return new Student(name, email, educationalInstitution,
+					Integer.valueOf(age), password);
+		return null;
 	}
 }

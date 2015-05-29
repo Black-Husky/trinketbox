@@ -28,7 +28,7 @@ public class Student implements Serializable {
 	private int age;
 	private String password;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private LinkedList<Exercise> exercises = new LinkedList<Exercise>();
 
 	public Student() {
@@ -85,6 +85,10 @@ public class Student implements Serializable {
 		this.password = password;
 	}
 
+	public String getPassword() {
+		return this.password;
+	}
+
 	public void setExercises(Exercise exercise) {
 		this.exercises.add(exercise);
 	}
@@ -93,11 +97,14 @@ public class Student implements Serializable {
 		return exercises;
 	}
 
+	public Boolean mathPassword(String password) {
+		return this.password.equals(password);
+	}
+
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", name=" + name + ", email=" + email
 				+ ", educationalInstitution=" + educationalInstitution
-				+ ", age=" + age + ", password=" + password + ", exercises="
-				+ exercises + "]";
+				+ ", age=" + age + ", exercises=" + exercises + "]";
 	}
 }
