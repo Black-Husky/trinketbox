@@ -41,7 +41,7 @@
 										placeholder=Email " id="emailaluno" name="email" />
 								</div>
 								<div class="form-group input-group">
-									<input type="text" size="40" class="form-control"
+									<input type="password" size="40" class="form-control"
 										placeholder="Senha" id="senhaaluno" name="password" />
 								</div>
 								<input type="submit" value="Cadastrar" class="btn btn-success btn-block"/>

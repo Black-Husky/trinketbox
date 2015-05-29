@@ -1,28 +1,39 @@
 package com.trinketBox.student;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Id;                                                                    
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.trinketBox.exercise.Exercise;
 
 @Entity
 public class Student implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-    // Persistent Fields:
-    @Id @GeneratedValue
-    Long id;
-    private String name;
-    private String email;
-    private String educationalInstitution;
-    private int age;
-    private String password;
-    
-    public Student(){
-    	
-    }
+
+	// Persistent Fields:
+	@Id
+	@GeneratedValue
+	Long id;
+	private String name;
+	private String email;
+	private String educationalInstitution;
+	private int age;
+	private String password;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	private LinkedList<Exercise> exercises = new LinkedList<Exercise>();
+
+	public Student() {
+
+	}
 
 	public Student(String name, String email, String educationalInstitution,
 			int age, String password) {
@@ -33,7 +44,7 @@ public class Student implements Serializable {
 		this.age = age;
 		this.password = password;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -74,10 +85,19 @@ public class Student implements Serializable {
 		this.password = password;
 	}
 
+	public void setExercises(Exercise exercise) {
+		this.exercises.add(exercise);
+	}
+
+	public LinkedList<Exercise> getExercises() {
+		return exercises;
+	}
+
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", name=" + name + ", email=" + email
 				+ ", educationalInstitution=" + educationalInstitution
-				+ ", age=" + age + "]";
+				+ ", age=" + age + ", password=" + password + ", exercises="
+				+ exercises + "]";
 	}
 }
