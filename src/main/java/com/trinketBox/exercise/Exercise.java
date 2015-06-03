@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Exercise implements Serializable {
@@ -15,8 +18,11 @@ public class Exercise implements Serializable {
 	@GeneratedValue
 	Long id;
 	Long ownerId;
+	@NotBlank
 	String name;
+	@NotBlank
 	String subject;
+	@NotBlank
 	String path;
 
 	public Exercise() {

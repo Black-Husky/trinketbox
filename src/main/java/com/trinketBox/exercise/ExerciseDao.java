@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.trinketBox.student.Student;
+import com.trinketBox.student.StudentDao;
 
 @Component
 public class ExerciseDao {
@@ -19,23 +20,21 @@ public class ExerciseDao {
 
 	// Stores a new student:
 	@Transactional
-	public void persist(Long ownerId, Exercise exercise) {
-		Student student = em.find(Student.class, Long.valueOf(ownerId));
-		if (student != null) {
-			em.persist(exercise);
-			student.setExercises(exercise); // connect the child to the parent
-		}
+	public void persist(Student student, Exercise exercise) {
+		student = em.find(Student.class, student.getId());
+		em.persist(exercise);
+		student.setExercises(exercise); // connect the child to the parent
 	}
 
 	@Transactional
-	public void update(Long ownerId, Long id, Exercise exercise2) {
-		Student student = em.find(Student.class, Long.valueOf(ownerId));
+	public void update(Student student, Long id, Exercise exercise2) {
 		Exercise exercise = em.find(Exercise.class, id);
-		if (student != null && exercise != null)
-			if ((exercise = student.getExercises().get(student.getExercises().indexOf(exercise))) != null) {
-				exercise.setName(exercise2.getName());
-				exercise.setSubject(exercise2.getSubject());
-			}
+		student = em.find(Student.class, student.getId());
+		if ((exercise = student.getExercises().get(
+				student.getExercises().indexOf(exercise))) != null) {
+			exercise.setName(exercise2.getName());
+			exercise.setSubject(exercise2.getSubject());
+		}
 	}
 
 	@Transactional
@@ -54,9 +53,12 @@ public class ExerciseDao {
 				"SELECT e FROM Exercise e ORDER BY e.id", Exercise.class);
 		return query.getResultList();
 	}
-	
-	
+
 	public Exercise getById(Long id) {
 		return em.find(Exercise.class, id);
+	}
+
+	public Student getStudentById(Long id) {
+		return em.find(Student.class, id);
 	}
 }

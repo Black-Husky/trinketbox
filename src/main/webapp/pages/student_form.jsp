@@ -1,10 +1,4 @@
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<%@page import="com.trinketBox.student.*"%>
-
-<jsp:useBean id="student" type="com.trinketBox.student.Student"
-	scope="request" />
+<%@ include file="../WEB-INF/includes.jsp"%>
 
 <tiles:insertDefinition name="defaultTemplate">
 	<tiles:putAttribute name="body">
@@ -12,7 +6,7 @@
 			<div class="row text-center ">
 				<div class="col-md-12">
 					<c:choose>
-						<c:when test="${student.id == null}">
+						<c:when test="${id == null}">
 							<h2>Cadastro de alunos</h2>
 
 							<h5>( Registro de alunos )</h5>
@@ -20,7 +14,7 @@
 						<c:otherwise>
 							<h2>Edição de aluno</h2>
 
-							<h5>( Editando o aluno : # ${student.id})</h5>
+							<h5>( Editando o aluno : # ${id})</h5>
 						</c:otherwise>
 					</c:choose>
 					<br />
@@ -34,43 +28,104 @@
 							<strong> Entre Com Seus Dados </strong>
 						</div>
 						<div class="panel-body">
-							<form role="form" method="post"
-								action="
 							<c:choose>
-    <c:when test="${student.id == null}">new_student.html</c:when>
-    <c:otherwise>update_student.html?id=${student.id}</c:otherwise>
-</c:choose>">
-								<br />
-								<div class="form-group input-group">
-									<input type="text" size="40" class="form-control"
-										placeholder="Seu Nome" id="nomealuno" name="name"
-										value="${student.name}" />
-								</div>
+								<c:when test='${id == null}'>
+									<c:url var="addUrl" value="new_student.html" />
+								</c:when>
+								<c:otherwise>
+									<c:url var="addUrl" value="update_student.html?id=${id}" />
+								</c:otherwise>
+							</c:choose>
+							<form:form id="form" method="post" action="${addUrl}"
+								modelAttribute="student">
+								<fieldset>
+									<div
+										class="form-group input-group <form:errors path='name'>has-error has-feedback</form:errors> ">
 
-								<div class="form-group input-group">
-									<input type="text" size="40" class="form-control"
-										placeholder="Escola/Faculdade" id="escolaaluno"
-										name="educationalInstitution"
-										value="${student.educationalInstitution}" />
-								</div>
+										<form:errors path="name" cssClass="control-label" />
+										<div class="input-group">
+											<span class="input-group-addon">Nome</span>
+											<form:input path="name" size="40" cssClass="form-control"
+												placeholder="Nome" />
+											<form:errors path="name">
+												<span
+													class="glyphicon glyphicon-remove form-control-feedback"
+													aria-hidden="true"></span>
+											</form:errors>
+										</div>
+										<form:errors path="name" cssClass="sr-only" />
+									</div>
+									<div
+										class="form-group input-group <form:errors path='age'>has-error has-feedback</form:errors> ">
 
-								<div class="form-group input-group">
-									<input type="text" size="40" class="form-control"
-										placeholder="Idade" id="idadealuno" name="age"
-										value="${student.age == '0' ? '' : student.age}" />
-								</div>
-								<div class="form-group input-group">
-									<input type="text" size="40" class="form-control"
-										placeholder=Email " id="emailaluno" name="email"
-										value="${student.email}" />
-								</div>
-								<div class="form-group input-group">
-									<input type="password" size="40" class="form-control"
-										placeholder="Senha" id="senhaaluno" name="password" value="" />
-								</div>
+										<form:errors path="age" cssClass="control-label" />
+										<div class="input-group">
+											<span class="input-group-addon">Idade</span>
+											<form:input path="age" size="40" cssClass="form-control"
+												placeholder="Idade" />
+											<form:errors path="age">
+												<span
+													class="glyphicon glyphicon-remove form-control-feedback"
+													aria-hidden="true"></span>
+											</form:errors>
+										</div>
+										<form:errors path="age" cssClass="sr-only" />
+									</div>
+									<div
+										class="form-group input-group <form:errors path='educationalInstitution'>has-error has-feedback</form:errors> ">
+
+										<form:errors path="educationalInstitution"
+											cssClass="control-label" />
+										<div class="input-group">
+											<span class="input-group-addon">Instituição
+												Educacional</span>
+											<form:input path="educationalInstitution" size="40"
+												cssClass="form-control"
+												placeholder="Instituição Educacional" />
+											<form:errors path="educationalInstitution">
+												<span
+													class="glyphicon glyphicon-remove form-control-feedback"
+													aria-hidden="true"></span>
+											</form:errors>
+										</div>
+										<form:errors path="educationalInstitution" cssClass="sr-only" />
+									</div>
+									<div
+										class="form-group input-group <form:errors path='email'>has-error has-feedback</form:errors> ">
+
+										<form:errors path="email" cssClass="control-label" />
+										<div class="input-group">
+											<span class="input-group-addon">Email</span>
+											<form:input path="email" size="40" cssClass="form-control"
+												placeholder="Email" />
+											<form:errors path="email">
+												<span
+													class="glyphicon glyphicon-remove form-control-feedback"
+													aria-hidden="true"></span>
+											</form:errors>
+										</div>
+										<form:errors path="email" cssClass="sr-only" />
+									</div>
+									<div
+										class="form-group input-group <form:errors path='password'>has-error has-feedback</form:errors> ">
+
+										<form:errors path="password" cssClass="control-label" />
+										<div class="input-group">
+											<span class="input-group-addon">Senha</span>
+											<form:password path="password" size="40"
+												cssClass="form-control" placeholder="Senha" />
+											<form:errors path="password">
+												<span
+													class="glyphicon glyphicon-remove form-control-feedback"
+													aria-hidden="true"></span>
+											</form:errors>
+										</div>
+										<form:errors path="password" cssClass="sr-only" />
+									</div>
+								</fieldset>
 								<input type="submit" value="Cadastrar"
 									class="btn btn-success btn-block" />
-							</form>
+							</form:form>
 						</div>
 					</div>
 				</div>

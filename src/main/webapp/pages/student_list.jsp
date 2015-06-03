@@ -1,5 +1,4 @@
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../WEB-INF/includes.jsp" %>
 
 <%@page import="com.trinketBox.student.*"%>
 <jsp:useBean id="studentDao" type="com.trinketBox.student.StudentDao"
